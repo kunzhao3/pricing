@@ -1,19 +1,23 @@
-<h4 id="CSrLL">一，目的</h4>
-      解决配置资方及资方要素，配置产品定价和资方定价所使用的定价编号，定价镜像编号，费项，公式编号以及费项公式相关属性，不用再手动书写SQL语句
+#### 一，目的
 
-<h4 id="suohD">二，处理步奏</h4>
-<h5 id="VfXkJ">1，新建模版Excel</h5>
- "费项"页签中费项名称和费项编码做个二级关联;更新"费项说明"页签,费项名称会实时更新,防止手写错误；
- <font style="color:#DF2A3F;"> 注意：</font><font style="color:#117CEE;">"费项说明"页签费项只需要新增,不要做修改和删除</font>
+解决配置资方及资方要素，配置产品定价和资方定价所使用的定价编号，定价镜像编号，费项，公式编号以及费项公式相关属性，不用再手动书写SQL语句
 
-[C5024.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366555881-31ac3520-5174-498e-8d31-b076217a933c.xlsx)</br>
-[C5048.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571683-b7b6793b-12d2-42ac-a7e0-0286f8004d8c.xlsx)</br>
+#### 二，处理步奏
+
+##### 1，新建模版Excel
+
+"费项"页签中费项名称和费项编码做个二级关联;更新"费项说明"页签,费项名称会实时更新,防止手写错误;
+<font style="color:#DF2A3F;"> 注意：</font><font style="color:#117CEE;">"费项说明"页签费项只需要新增,不要做修改和删除</font>
+[C5024.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366555881-31ac3520-5174-498e-8d31-b076217a933c.xlsx)
+[C5048.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571683-b7b6793b-12d2-42ac-a7e0-0286f8004d8c.xlsx)
 [C5056.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571701-ee65c81d-42c9-4f15-b02d-e5f94356c841.xlsx)
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/56924506/1756359238688-95151c9f-d937-47fa-bff0-0b9ec5bdea4d.png)
 
-<h5 id="HOlFw">2，新建两张表</h5>
-<h6 id="EOmb0"> 2.1，费项模版表  </h6>
+##### 2，新建两张表
+
+###### 2.1，费项模版表
+
 ```sql
 -- 基于费项和费项公式建立费项模版
 DROP TABLE IF EXISTS t_pec_fee_template;
@@ -37,7 +41,8 @@ create table  t_pec_fee_template
     comment '费项模版表';
 ```
 
-<h6 id="tNXuk">2.2，资方模版表</h6>
+###### 2.2，资方模版表
+
 ```sql
 -- 基于资方和代偿方建立资方模版
 DROP TABLE IF EXISTS t_pec_capital_template;
@@ -67,12 +72,15 @@ create table  t_pec_capital_template
     comment '资方模版表';
 ```
 
-<h6 id="ddNLR"> 2.3，两张表关系说明</h6>
-资方模版表的f_fee_template_no(费项模版编号)关联费项模版表的f_template_no(模版编号);同一个费项模版关联多个资方模版
+###### 2.3，两张表关系说明
+
+资方模版表的f_fee_template_no(费项模版编号)关联费项模版表的f_template_no(模版编号);</br>
+同一个费项模版关联多个资方模版
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/56924506/1756353025144-16080411-3243-4ac9-a419-01ebe5b3be0b.png)
 
-<h6 id="CtF9R">2.4，先插入费项模版表,再插入资方模版表</h6>
+###### 2.4，先插入费项模版表,再插入资方模版表
+
 ```sql
 INSERT INTO t_pec_fee_template
 (f_template_no, f_template_name, f_fee_code, f_fee_name, f_formula_no, f_formula_name, f_operater_name) 
@@ -99,8 +107,8 @@ VALUES
 ('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'SERVICE_FEE', '服务费', '6a2cda7b6f3b45fc9426e0aa7f96acc6', '综合兜底费项公式', 'PEC'),
 ('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'SERVICE_FEE_SETTLEMENT', '服务费结算', '', '服务费结算', 'PEC')
 ;
-
 ```
+
 模版编号UUID生成,同一个模版下根据需求配置多个费项<font style="color:#DF2A3F;">(注意:不用配置本息计算费项即:f_fee_code='')</font>,每个费项对应公式编号和公式名称由FCC提供的
 
 ```sql
@@ -121,15 +129,18 @@ VALUES
 ;
 ```
 
-   1,资方的<font style="color:#DF2A3F;">f_match_target_code</font>(匹配编码)是代偿方的编码,而代偿方的f_match_target_code是资方编码,这样就可以知道资方需要配置那些代偿方;</br>
-   2,一个资方有<font style="color:#DF2A3F;">多个代偿方</font>就需要在f_match_target_code按<font style="color:#117CEE;">风险等级</font><font style="color:#DF2A3F;">(f_match_target_rank_level)</font>分类用逗号隔开; </br>
-     而<font style="color:#DF2A3F;">多个代偿方</font>也要按照<font style="color:#117CEE;">风险等级</font>一对一配置对应f_match_target_code匹配的资方编码; 参考C5048;</br>
-   3,<font style="color:#DF2A3F;">f_repayment_formula_no</font>(本息计算公式编号),<font style="color:#DF2A3F;">f_clearing_formula_no</font>(资方/代偿方清分公式编号)也是FCC提供; </br>
-     <font style="color:#DF2A3F;">注意:</font><font style="color:#117CEE;">f_clearing_formula_no</font><font style="color:#DF2A3F;">区分资方和代偿方值是不同的</font></br>
-   4,如若资方需要支持<font style="color:#DF2A3F;">加速到期</font>则<font style="color:#117CEE;">f_is_support_accelerate</font>(是否支持加速到期)配置为1即可;</br>
-   5,还有<font style="color:#DF2A3F;">特别注意:</font><font style="color:#117CEE;">f_repurchase_calculation_mode</font>(回购时重算),这个是回购时债权合并成一期有些费用要重新计算,就需要配置该字段,目前只有<font style="color:#DF2A3F;">担保费,逾期担保费,固收担保费1,固收担保费2</font>使用;</br>
-     如果<font style="color:#DF2A3F;">有别的费项，则修改</font><font style="color:#117CEE;">FeeFormulaParamMapping</font><font style="color:#DF2A3F;">类中的费项添加</font><font style="color:#117CEE;">calculationMode</font><font style="color:#DF2A3F;">属性即可;</font></br>
-   6,而f_fee_template_no不用多说就对应费项模版表的模版编号;f_fee_code配置的是资方或代偿方的需要费项,多个费项用逗号隔开<font style="color:#DF2A3F;">(注意:不用配置本息计算费项即:f_fee_code='');</font>
+1,资方的<font style="color:#DF2A3F;">f_match_target_code</font>(匹配编码)是代偿方的编码,而代偿方的f_match_target_code                是资方编码,这样就可以知道资方需要配置那些代偿方;
 
-<h5 id="pdHdi">三，代码逻辑</h5>
+2,一个资方有<font style="color:#DF2A3F;">多个代偿方</font>就需要在f_match_target_code按<font style="color:#117CEE;">风险等级</font><font style="color:#DF2A3F;">(f_match_target_rank_level)</font>分类用逗号隔开; 而<font style="color:#DF2A3F;">多个代偿方</font>也要按照<font style="color:#117CEE;">风险等级</font>一对一配置对应f_match_target_code匹配的资方编码; 参考<font style="color:#DF2A3F;">C5048</font><font style="color:#000000;">;</font>
+
+其中<font style="color:#DF2A3F;">f_repayment_formula_no</font>(本息计算公式编号),<font style="color:#DF2A3F;">f_clearing_formula_no</font>(资方/代偿方清分公式编号)也是FCC提供; <font style="color:#DF2A3F;">注意:</font><font style="color:#117CEE;">f_clearing_formula_no</font><font style="color:#DF2A3F;">区分资方和代偿方值是不同的</font>
+
+3,如若资方需要支持<font style="color:#DF2A3F;">加速到期</font>则_**<font style="color:#117CEE;">f_is_support_accelerate</font>(是否支持加速到期)配置为1即可;
+
+4,还有<font style="color:#DF2A3F;">特别注意:</font><font style="color:#117CEE;">f_repurchase_calculation_mode</font>(回购时重算),这个是回购时债权合并成一期有些费用要重新计算,就需要配置该字段,目前只有<font style="color:#DF2A3F;">担保费,逾期担保费,固收担保费1,固收担保费2</font>使用;如果<font style="color:#DF2A3F;">有别的费项，则修改</font><font style="color:#117CEE;">FeeFormulaParamMapping</font><font style="color:#DF2A3F;">类中的费项添加</font><font style="color:#117CEE;">calculationMode</font><font style="color:#DF2A3F;">属性即可;</font>
+
+5,而f_fee_template_no不用多说就对应费项模版表的模版编号;f_fee_code配置的是资方或代偿方的需要费项,多个费项用逗号隔开<font style="color:#DF2A3F;">(注意:不用配置本息计算费项即:f_fee_code='');</font>
+
+##### 三，代码逻辑
+
 ![](https://cdn.nlark.com/yuque/0/2025/png/56924506/1756429661425-4f82e921-3c68-4ae8-8c0a-b0857c5a0d5b.png)
