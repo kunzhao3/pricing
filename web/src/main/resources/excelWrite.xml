@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parses xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="excel.xsd">
+
+	<parse id="PricingFeeBean" name="定价费项" filename="" filetype="" classname="com.parses.server.bean.PricingFeeBean">
+		<columns>
+			<column cidx="0" cname="定价类型" pname="pricingType" type="" cformat="" handler=""/>
+			<column cidx="1" cname="定价编号" pname="pricingNo" type="" cformat="" handler=""/>
+			<column cidx="2" cname="定价镜像编号" pname="pricingMirrorNo" type="" cformat="" handler=""/>
+			<column cidx="3" cname="费用代码" pname="feeCode" type="" cformat="" handler=""/>
+			<column cidx="4" cname="费用名称" pname="feeName" type="" cformat="" handler=""/>
+			<column cidx="5" cname="费用描述" pname="feeDescription" type="" cformat="" handler=""/>
+			<column cidx="6" cname="计算周期" pname="calcPeriod" type="" cformat="" handler=""/>
+			<column cidx="7" cname="公式类型" pname="formulaType" type="" cformat="" handler=""/>
+		</columns>
+	</parse>
+
+</parses>

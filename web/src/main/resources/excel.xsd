@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- 限定为字符串类型 -->
+    <xs:simpleType name="stringType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <!-- 限定为整数类型 -->
+    <xs:simpleType name="integerType">
+        <xs:restriction base="xs:integer"/>
+    </xs:simpleType>
+
+    <xs:element name="parses">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="parse" type="parseType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="parseType">
+        <xs:sequence>
+            <xs:element name="columns" type="columnsType"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="stringType" use="required"/>
+        <xs:attribute name="name" type="stringType" use="required"/>
+        <xs:attribute name="filename" type="stringType"/>
+        <xs:attribute name="filetype" type="stringType"/>
+        <xs:attribute name="classname" type="stringType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="columnsType">
+        <xs:sequence>
+            <xs:element name="column" type="columnType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="columnType">
+        <xs:attribute name="cidx" type="integerType" use="required"/>
+        <xs:attribute name="cname" type="stringType" use="required"/>
+        <xs:attribute name="pname" type="stringType" use="required"/>
+        <xs:attribute name="type" type="stringType"/>
+        <xs:attribute name="cformat" type="stringType"/>
+        <xs:attribute name="handler" type="stringType"/>
+    </xs:complexType>
+</xs:schema>

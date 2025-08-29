@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parses xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:noNamespaceSchemaLocation="excel.xsd">
+	<parse id="ProductPricingBean" name="产品定价" filename="" filetype="" classname="com.parses.server.bean.ProductPricingBean">
+		<columns>
+			<column cidx="0" cname="产品编码" pname="productCode" type="" cformat="" handler=""/>
+			<column cidx="1" cname="期次" pname="totalStage" type="" cformat="" handler=""/>
+			<column cidx="2" cname="等级" pname="rankLevel" type="" cformat="" handler=""/>
+			<column cidx="3" cname="标签" pname="consumerLabel" type="" cformat="" handler=""/>
+			<column cidx="4" cname="年利率" pname="yearRate" type="" cformat="" handler=""/>
+			<column cidx="5" cname="月综合利率" pname="aprMonthRate" type="" cformat="" handler=""/>
+		</columns>
+	</parse>
+
+	<parse id="ExlFeeParamBean" name="定价费项属性" filename="" filetype="" classname="com.parses.util.bean.ExlFeeParamBean">
+		<columns>
+			<column cidx="0" cname="总期数" pname="totalStage" type="" cformat="" handler=""/>
+			<column cidx="1" cname="风险等级" pname="rankLevel" type="" cformat="" handler=""/>
+			<column cidx="2" cname="用户标签" pname="consumerLabel" type="" cformat="" handler=""/>
+			<column cidx="3" cname="费用名称" pname="feeName" type="" cformat="" handler=""/>
+			<column cidx="4" cname="费用代码" pname="feeCode" type="" cformat="" handler=""/>
+			<column cidx="5" cname="年利率" pname="yearRate" type="" cformat="" handler=""/>
+			<column cidx="6" cname="提前结清日利率" pname="preSettleDayRate" type="" cformat="" handler=""/>
+			<column cidx="7" cname="利率" pname="baseRate" type="" cformat="" handler=""/>
+			<column cidx="8" cname="年天数" pname="yearDays" type="" cformat="" handler=""/>
+			<column cidx="9" cname="罚息/逾期违约金计算方式" pname="baseAmountType" type="" cformat="" handler=""/>
+			<column cidx="10" cname="月综合利率" pname="complexMonthRate" type="" cformat="" handler=""/>
+			<column cidx="11" cname="资方和对资担保公司IRR" pname="capitalAndUndertakeCapitalGuaranteeYearIRR" type="" cformat="" handler=""/>
+			<column cidx="12" cname="结算利率" pname="settlementRate" type="" cformat="" handler=""/>
+			<column cidx="13" cname="浮动利率" pname="floatingRate" type="" cformat="" handler=""/>
+		</columns>
+	</parse>
+
+	<parse id="ElementDataBean" name="要素" filename="" filetype="" classname="com.parses.server.bean.ElementDataBean">
+		<columns>
+			<column cidx="1" cname="要素代码" pname="elementCode" type="" cformat="" handler=""/>
+			<column cidx="2" cname="要素代码数据" pname="elementData" type="" cformat="" handler=""/>
+		</columns>
+	</parse>
+
+</parses>
