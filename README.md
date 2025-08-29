@@ -6,10 +6,10 @@
 
 ##### 1，新建模版Excel
 
-"费项"页签中费项名称和费项编码做个二级关联;更新"费项说明"页签,费项名称会实时更新,防止手写错误;
-<font style="color:#DF2A3F;"> 注意：</font><font style="color:#117CEE;">"费项说明"页签费项只需要新增,不要做修改和删除</font>
-[C5024.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366555881-31ac3520-5174-498e-8d31-b076217a933c.xlsx)
-[C5048.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571683-b7b6793b-12d2-42ac-a7e0-0286f8004d8c.xlsx)
+"费项"页签中费项名称和费项编码做个二级关联;更新"费项说明"页签,费项名称会实时更新,防止手写错误;</br>
+<font style="color:#DF2A3F;"> 注意：</font><font style="color:#117CEE;">"费项说明"页签费项只需要新增,不要做修改和删除</font></br>
+[C5024.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366555881-31ac3520-5174-498e-8d31-b076217a933c.xlsx)</br>
+[C5048.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571683-b7b6793b-12d2-42ac-a7e0-0286f8004d8c.xlsx)</br>
 [C5056.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571701-ee65c81d-42c9-4f15-b02d-e5f94356c841.xlsx)
 
 ![](https://cdn.nlark.com/yuque/0/2025/png/56924506/1756359238688-95151c9f-d937-47fa-bff0-0b9ec5bdea4d.png)
@@ -135,7 +135,7 @@ VALUES
 
 其中<font style="color:#DF2A3F;">f_repayment_formula_no</font>(本息计算公式编号),<font style="color:#DF2A3F;">f_clearing_formula_no</font>(资方/代偿方清分公式编号)也是FCC提供; <font style="color:#DF2A3F;">注意:</font><font style="color:#117CEE;">f_clearing_formula_no</font><font style="color:#DF2A3F;">区分资方和代偿方值是不同的</font>
 
-3,如若资方需要支持<font style="color:#DF2A3F;">加速到期</font>则_**<font style="color:#117CEE;">f_is_support_accelerate</font>(是否支持加速到期)配置为1即可;
+3,如若资方需要支持<font style="color:#DF2A3F;">加速到期</font>则<font style="color:#117CEE;">f_is_support_accelerate</font>(是否支持加速到期)配置为1即可;
 
 4,还有<font style="color:#DF2A3F;">特别注意:</font><font style="color:#117CEE;">f_repurchase_calculation_mode</font>(回购时重算),这个是回购时债权合并成一期有些费用要重新计算,就需要配置该字段,目前只有<font style="color:#DF2A3F;">担保费,逾期担保费,固收担保费1,固收担保费2</font>使用;如果<font style="color:#DF2A3F;">有别的费项，则修改</font><font style="color:#117CEE;">FeeFormulaParamMapping</font><font style="color:#DF2A3F;">类中的费项添加</font><font style="color:#117CEE;">calculationMode</font><font style="color:#DF2A3F;">属性即可;</font>
 
