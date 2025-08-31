@@ -24,21 +24,6 @@ public enum FeeFormulaParamMapping {
     GUARANTEE_FEE("担保费", "GUARANTEE_FEE", Arrays.asList(baseRate, yearDays, settlementRate, calculationMode)),
 
     /**
-     * 逾期担保费
-     */
-    OVERDUE_GUARANTEE_FEE("逾期担保费", "OVERDUE_GUARANTEE_FEE", Arrays.asList(baseRate, graceDays, yearDays, includeGraceDays, calculationMode)),
-
-    /**
-     * 逾期担保费1
-     */
-    OVERDUE_GUARANTEE_FEE_ONE("逾期担保费1", "OVERDUE_GUARANTEE_FEE_ONE", Arrays.asList(baseRate, graceDays, yearDays)),
-
-    /**
-     * 逾期担保费2
-     */
-    OVERDUE_GUARANTEE_FEE_TWO("逾期担保费2", "OVERDUE_GUARANTEE_FEE_TWO", Arrays.asList(baseRate, graceDays, yearDays)),
-
-    /**
      * 固收担保费1
      */
     GUARANTEE_FEE_ONE("固收担保费1", "GUARANTEE_FEE_ONE", Arrays.asList(baseRate, yearDays, calculationMode)),
@@ -56,7 +41,7 @@ public enum FeeFormulaParamMapping {
     /**
      * 服务费1
      */
-    SERVICE_FEE_ONE("服务费", "SERVICE_FEE_ONE", Arrays.asList(capitalAndUndertakeCapitalGuaranteeYearIRR, yearDays)),
+    SERVICE_FEE_ONE("服务费1", "SERVICE_FEE_ONE", Arrays.asList(capitalAndUndertakeCapitalGuaranteeYearIRR, yearDays)),
 
     /**
      * 服务费2
@@ -87,6 +72,20 @@ public enum FeeFormulaParamMapping {
      * 逾期违约金3
      */
     OVERDUE_LIQUIDATED_DAMAGES_THREE("逾期违约金3", "OVERDUE_LIQUIDATED_DAMAGES_THREE", Arrays.asList(baseRate, graceDays, chargeMode, baseAmountType, includePayDate, quickenRecalculate)),
+
+    /**
+     * 逾期担保费
+     */
+    OVERDUE_GUARANTEE_FEE("逾期担保费", "OVERDUE_GUARANTEE_FEE", Arrays.asList(baseRate, graceDays, yearDays, includeGraceDays, calculationMode)),
+    /**
+     * 逾期担保费1
+     */
+    OVERDUE_GUARANTEE_FEE_ONE("逾期担保费1", "OVERDUE_GUARANTEE_FEE_ONE", Arrays.asList(baseRate, graceDays, yearDays)),
+
+    /**
+     * 逾期担保费2
+     */
+    OVERDUE_GUARANTEE_FEE_TWO("逾期担保费2", "OVERDUE_GUARANTEE_FEE_TWO", Arrays.asList(baseRate, graceDays, yearDays)),
 
     /**
      * 资产管理费
