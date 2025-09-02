@@ -117,7 +117,7 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                 pricingFeeBean.setPricingType(1);
                 pricingFeeBean.setOperaterName("PEC");
                 if (capitalTemplate.getMatchTargetRankLevel().contains(pricingFeeBean.getRankLevel())) {
-                    List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMapping(pricingFeeBean.getFeeCode())).getParams();
+                    List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMappingByFeeCode(pricingFeeBean.getFeeCode())).getParams();
                     List<FormulaParamModel> formulaParamList = pricingFeeBean.getFormulaParamList();
                     for (FormulaParamMapping feeFormulaParam : feeFormulaParams) {
                         FormulaParamModel formulaParamModel = new FormulaParamModel();

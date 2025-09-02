@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public enum FormulaParamMapping {
     totalStage("总期数", "totalStage", "0","期次"),
-    yearRate("年利率", "yearRate", "0.00","资方年率"),
+    yearRate("年利率", "yearRate", "0.00","资方年利率"),
     preSettleDayRate("提前结清日利率", "preSettleDayRate", "0.00","资方提前结清日利率"),
     baseRate("费用利率", "baseRate", "0.00","费用利率"),
     yearDays("年天数", "yearDays", "365","计算费用的年天数"),
@@ -18,7 +18,7 @@ public enum FormulaParamMapping {
     baseAmountType("计算方式", "baseAmountType", "2","1:全部本金,2:剩余本金,3:全部本息,4:剩余本息,5:期初剩余本金,6:期末剩余本金"),
     includePayDate("是否包含还款日当天", "includePayDate", "0","0:不包含,1:包含"),
     includeGraceDays("逾期天数是否包含宽限期天数", "includeGraceDays", "false","false:不包含,true:包含"),
-    complexMonthRate("月综合费率", "complexMonthRate", "0.00","月综合费率"),
+    complexMonthRate("月综合利率", "complexMonthRate", "0.00","月综合利率"),
     preSettleComplexDayRate("提前结清综合利率千一", "preSettleComplexDayRate", "0.001","提前结清综合利率千一"),
     preSettleSwitchRate("提前结清综合利率百四", "preSettleSwitchRate", "0.04","提前结清综合利率百四"),
     capitalAndUndertakeCapitalGuaranteeYearIRR("资方和对资担保公司IRR", "capitalAndUndertakeCapitalGuaranteeYearIRR", "0.00","资方和对资担保公司IRR"),

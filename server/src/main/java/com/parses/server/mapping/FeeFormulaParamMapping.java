@@ -118,9 +118,18 @@ public enum FeeFormulaParamMapping {
     }
 
 
-    public static FeeFormulaParamMapping getFeeParamsMapping(String feeCode) {
+    public static FeeFormulaParamMapping getFeeParamsMappingByFeeCode(String feeCode) {
         for (FeeFormulaParamMapping feeFormulaParamMapping : values()) {
             if (feeFormulaParamMapping.feeCode.equals(feeCode)) {
+                return feeFormulaParamMapping;
+            }
+        }
+        return null;
+    }
+
+    public static FeeFormulaParamMapping getFeeParamsMappingByFeeName(String feeName) {
+        for (FeeFormulaParamMapping feeFormulaParamMapping : values()) {
+            if (feeFormulaParamMapping.feeName.equals(feeName)) {
                 return feeFormulaParamMapping;
             }
         }

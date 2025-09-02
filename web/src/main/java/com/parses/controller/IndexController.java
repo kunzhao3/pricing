@@ -26,9 +26,7 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class IndexController {
@@ -48,7 +46,7 @@ public class IndexController {
     private CreatePricingServer createPricingServer;
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
-
+    private static final Map<String, Map<String, Integer>> levelColumnMap = new HashMap<>();
 
     @GetMapping("/")
     public String index() {
@@ -95,7 +93,7 @@ public class IndexController {
             Field[] exlFeeParamBeanFields = exlFeeParamBeanClass.getDeclaredFields();
             for (ExlFeeParamBean exlFeeParamBean : lists) {
                 PricingFeeBean pricingFeeBean = this.mapperFacade.map(exlFeeParamBean, PricingFeeBean.class);
-                List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMapping(pricingFeeBean.getFeeCode())).getParams();
+                List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMappingByFeeCode(pricingFeeBean.getFeeCode())).getParams();
                 List<FormulaParamModel> formulaParamList = new ArrayList<>();
                 for (FormulaParamMapping feeFormulaParam : feeFormulaParams) {
                     for (Field exlFeeParamBeanField : exlFeeParamBeanFields) {
@@ -130,4 +128,53 @@ public class IndexController {
         return "redirect:/";
     }
 
+    @GetMapping("/merge")
+    public String merge() {
+        return "merge";
+    }
+
+    @PostMapping("/uploadByMergeCell")
+    public String uploadByMergeCell(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "请选择要上传的文件");
+            return "redirect:merge";
+        }
+        try {
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            Path filePath = uploadPath.resolve(Objects.requireNonNull(file.getOriginalFilename()));
+            if (Files.exists(filePath)) {
+                redirectAttributes.addFlashAttribute("message", "文件已存在: " + file.getOriginalFilename());
+                return "redirect:merge";
+            }
+            Files.copy(file.getInputStream(), filePath);
+            ExlRead exlRead = new ExlRead(uploadDir + file.getOriginalFilename());
+            // 资方和资方要素
+            List<ElementDataBean> capitalElementList = exlRead.readExcel("ElementDataBean", SheetIndex.CAPITAL_ELEMENT, false);
+            String capitalCode = "";
+            for (ElementDataBean elementDataBean : capitalElementList) {
+                if (elementDataBean.getElementCode().equals(ElementCode.CAPITAL_CODE)) {
+                    capitalCode = elementDataBean.getElementData();
+                    break;
+                }
+            }
+            CapitalBean capitalBean = capitalServer.createCapital(capitalCode);
+            elementDataServer.addCapitalInfo(capitalElementList, capitalBean);
+
+
+            redirectAttributes.addFlashAttribute("message", "文件上传成功: " + file.getOriginalFilename());
+        } catch (IOException e) {
+            Path path = Paths.get(uploadDir + file.getOriginalFilename());
+            try {
+                Files.deleteIfExists(path);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            logger.error("文件上传失败: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("message", "文件上传失败: " + e.getMessage());
+        }
+        return "redirect:merge";
+    }
 }

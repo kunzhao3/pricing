@@ -20,19 +20,21 @@ import java.util.List;
 
 public class ExlRead {
     public static final String fileName = "/excelRead.xml";
-
-    private final String path;
+    Workbook wb;
 
     public ExlRead(String path) {
-        this.path = path;
+        try {
+            InputStream inp = Files.newInputStream(Paths.get(path));
+            wb = WorkbookFactory.create(inp);
+        } catch (IOException | InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public <T> List<T> getDataByColumn(int sheetIndex, boolean readHead, Parse parse) {
         List<T> dataList = new ArrayList<>();
         try {
             Class<?> clazz = Class.forName(parse.getClassname());
-            InputStream inp = Files.newInputStream(Paths.get(path));
-            Workbook wb = WorkbookFactory.create(inp);
             List<Column> columns = parse.getColumns().getColumn();
             if (null == columns || columns.isEmpty()) {
                 throw new NullPointerException(fileName + "文件没有配置column");
@@ -81,9 +83,8 @@ public class ExlRead {
                 }
                 dataList.add(o);
             }
-            inp.close();
-        } catch (ClassNotFoundException | IOException | InvalidFormatException | IntrospectionException |
-                 InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (ClassNotFoundException | IntrospectionException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             throw new RuntimeException(e);
         }
         return dataList;
