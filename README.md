@@ -7,7 +7,7 @@
 ##### 1，新建模版Excel
 
 "费项"页签中费项名称和费项编码做个二级关联;更新"费项说明"页签,费项名称会实时更新,防止手写错误;</br>
-![](https://cdn.nlark.com/yuque/0/2025/png/56924506/1756359238688-95151c9f-d937-47fa-bff0-0b9ec5bdea4d.png)
+![](https://cdn.nlark.com/yuque/0/2025/png/56924506/1756359238688-95151c9f-d937-47fa-bff0-0b9ec5bdea4d.png)</br>
 <font style="color:#DF2A3F;"> 注意：</font><font style="color:#117CEE;">"费项说明"页签费项只需要新增,不要做修改和删除</font></br>
 [C5024.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366555881-31ac3520-5174-498e-8d31-b076217a933c.xlsx)</br>
 [C5048.xlsx](https://www.yuque.com/attachments/yuque/0/2025/xlsx/56924506/1756366571683-b7b6793b-12d2-42ac-a7e0-0286f8004d8c.xlsx)</br>
