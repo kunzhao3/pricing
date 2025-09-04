@@ -176,7 +176,7 @@ public class ExlRead {
         List<ProductPricingBean> productPricingBeans = new ArrayList<>();
         for (int rowNum = rowStartNum; rowNum <= sheet.getLastRowNum(); rowNum++) {
             Row row = sheet.getRow(rowNum);
-            if (row == null) continue;
+            if (isRowEmpty(row)) continue;
             Integer totalStage = Integer.valueOf(getCellStringValue(row.getCell(0)));
             for (String level : allLevelList) {
                 String[] consumerLabels = level.split("-");
