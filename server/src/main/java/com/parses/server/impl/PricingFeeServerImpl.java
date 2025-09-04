@@ -27,10 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -123,6 +120,15 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                         FormulaParamModel formulaParamModel = new FormulaParamModel();
                         formulaParamModel.setParamCode(feeFormulaParam.getParamCode());
                         switch (feeFormulaParam) {
+                            case baseAmountType:
+                                Set<String> paramCodeSet = formulaParamList.stream()
+                                        .map(FormulaParamModel::getParamCode)
+                                        .collect(Collectors.toSet());
+                                if (!paramCodeSet.contains(FormulaParamMapping.baseAmountType.getParamCode())) {
+                                    formulaParamModel.setValue(feeFormulaParam.getDefaultValue());
+                                    formulaParamList.add(formulaParamModel);
+                                }
+                                break;
                             case chargeMode:
                             case includePayDate:
                             case includeGraceDays:

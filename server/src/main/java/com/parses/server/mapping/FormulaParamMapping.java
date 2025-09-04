@@ -42,4 +42,13 @@ public enum FormulaParamMapping {
         this.defaultValue = defaultValue;
         this.description = description;
     }
+
+    public static FormulaParamMapping getParamMappingByParamName(String paramName) {
+        for (FormulaParamMapping paramMapping : FormulaParamMapping.values()) {
+            if (paramMapping.paramName.equals(paramName)) {
+                return paramMapping;
+            }
+        }
+        return null;
+    }
 }

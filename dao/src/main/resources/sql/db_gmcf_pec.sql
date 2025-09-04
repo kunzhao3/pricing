@@ -369,7 +369,14 @@ VALUES
 ('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'OVERDUE_LIQUIDATED_DAMAGES', '逾期违约金', 'f58468b3e1564d44b026e994c2ba0528', '罚息计算公式', 'PEC'),
 ('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'PENALTY_INTEREST', '罚息', 'f58468b3e1564d44b026e994c2ba0528', '罚息计算公式', 'PEC'),
 ('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'SERVICE_FEE', '服务费', '6a2cda7b6f3b45fc9426e0aa7f96acc6', '综合兜底费项公式', 'PEC'),
-('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'SERVICE_FEE_SETTLEMENT', '服务费结算', '', '服务费结算', 'PEC')
+('9549749e60bf42ba86d3bf0da5ec41ab', '资产管理费模版', 'SERVICE_FEE_SETTLEMENT', '服务费结算', '', '服务费结算', 'PEC'),
+
+('5cf3f23abbda444cbd538f36d9fae2a8', '分润模版', 'ASSET_MANAGE_FEE', '资产管理费', '6a2cda7b6f3b45fc9426e0aa7f96acc6', '综合兜底费项公式', 'PEC'),
+('5cf3f23abbda444cbd538f36d9fae2a8', '分润模版', 'GUARANTEE_FEE', '担保费', '9f8fac353dc14e7cb141522bcc90ff74', '联合收担保费计算公式2', 'PEC'),
+('5cf3f23abbda444cbd538f36d9fae2a8', '分润模版', 'OVERDUE_LIQUIDATED_DAMAGES', '逾期违约金', '5f110648dc3a4b34a9e20c12a685a776', '逾期违约金计算公式', 'PEC'),
+('5cf3f23abbda444cbd538f36d9fae2a8', '分润模版', 'PENALTY_INTEREST', '罚息', '52bd9a018a0e4732b5770e11180f9153', '罚息计算公式', 'PEC'),
+('5cf3f23abbda444cbd538f36d9fae2a8', '分润模版', 'SERVICE_FEE', '服务费', 'a242757aa7684cd1a3e8236c77daae35', '服务费计算公式', 'PEC')
+
 ;
 
 DROP TABLE IF EXISTS t_pec_capital_template;
@@ -408,7 +415,10 @@ VALUES
 (2, 'G0009', 'C5048', 'B,C,D', '077dfd23594f45d9a675038e4461b610', '蓝海银行（实担）债务债权公式', 'dcf7e938b45c479489b279fa0c78b7de', '双代偿双融担代偿清分公式', 1,'' ,'7fb28bcde98540f4bfa1d4b11b031546', '', 'PEC'),
 (2, 'G0012', 'C5048', 'B,C,D', '077dfd23594f45d9a675038e4461b610', '蓝海银行（实担）债务债权公式', 'dcf7e938b45c479489b279fa0c78b7de', '双代偿双融担代偿清分公式', 1,'' ,'7fb28bcde98540f4bfa1d4b11b031546', '', 'PEC'),
 (1, 'C5056', 'G0012', 'A', 'db1f52bdd6064a92ab7c2fd23714f4a8', '京东云工厂(中原消金)债务债权计算公式', '766bdbe4294c42a2bee62d06d15bc746', '联合收清分公式', 0, '' ,'9549749e60bf42ba86d3bf0da5ec41ab', 'PENALTY_INTEREST', 'PEC'),
-(2, 'G0012', 'C5056', 'A', 'db1f52bdd6064a92ab7c2fd23714f4a8', '京东云工厂(中原消金)债务债权计算公式', '39002f22bf7e41fd9f4e30aa949d1d96', '联合收代偿清分公式', 0,'' ,'9549749e60bf42ba86d3bf0da5ec41ab', 'OVERDUE_LIQUIDATED_DAMAGES', 'PEC')
+(2, 'G0012', 'C5056', 'A', 'db1f52bdd6064a92ab7c2fd23714f4a8', '京东云工厂(中原消金)债务债权计算公式', '39002f22bf7e41fd9f4e30aa949d1d96', '联合收代偿清分公式', 0,'' ,'9549749e60bf42ba86d3bf0da5ec41ab', 'OVERDUE_LIQUIDATED_DAMAGES', 'PEC'),
+(1, 'C5059', '', 'A', 'db1f52bdd6064a92ab7c2fd23714f4a8', '小米消金(分润)放款债务债权计算公式', 'db2d3f0b67234d0fbeaacb7f28fddc31', '清分公式', 0, '' ,'5cf3f23abbda444cbd538f36d9fae2a8', 'PENALTY_INTEREST', 'PEC'),
+(1, 'C5059', 'G0012', 'B,C,D', 'db1f52bdd6064a92ab7c2fd23714f4a8', '小米消金(分润)放款债务债权计算公式', 'db2d3f0b67234d0fbeaacb7f28fddc31', '清分公式', 0,'' ,'5cf3f23abbda444cbd538f36d9fae2a8', 'PENALTY_INTEREST', 'PEC'),
+(2, 'G0012', 'C5059', 'B,C,D', 'db1f52bdd6064a92ab7c2fd23714f4a8', '小米消金(分润)放款债务债权计算公式', 'db3e734a1b7e40518c7832f5e75a68b9', '代偿清分公式', 0,'' ,'5cf3f23abbda444cbd538f36d9fae2a8', 'OVERDUE_LIQUIDATED_DAMAGES', 'PEC')
 ;
 
 

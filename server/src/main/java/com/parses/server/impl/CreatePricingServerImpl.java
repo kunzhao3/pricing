@@ -7,15 +7,15 @@ import com.parses.dao.model.csc.MerchantMemberEntity;
 import com.parses.server.*;
 import com.parses.server.bean.*;
 import com.parses.server.bean.dto.CompensatoryDto;
-import com.parses.server.mapping.MultipleCompensatoryMapping;
 import com.parses.server.constant.TemplateCapitalType;
 import com.parses.server.csc.CscMerchantMemberServer;
+import com.parses.server.mapping.MultipleCompensatoryMapping;
 import com.parses.server.util.UUIDUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -55,6 +55,9 @@ public class CreatePricingServerImpl implements CreatePricingServer {
         this.batchInsertPricingAndFee(capitalTemplates, productPricingBeans);
         Set<String> compensatoryCodes = new HashSet<>();
         for (CapitalTemplateEntity capitalTemplateEntity : capitalTemplates) {
+            if (StringUtils.isEmpty(capitalTemplateEntity.getMatchTargetCode())) {
+                continue;
+            }
             for (String compensatoryCode : capitalTemplateEntity.getMatchTargetCode().split(",")) {
                 boolean flag = compensatoryCodes.add(compensatoryCode);
                 if (flag) {
@@ -66,12 +69,14 @@ public class CreatePricingServerImpl implements CreatePricingServer {
                 }
             }
         }
-
     }
 
     private void batchInsertPricingAndFee(List<CapitalTemplateEntity> capitalTemplates, List<ProductPricingBean> productPricingBeans) {
         Map<String, CompensatoryDto> compensatoryDtoMap = new HashMap<>();
         for (CapitalTemplateEntity capitalTemplateEntity : capitalTemplates) {
+            if (StringUtils.isEmpty(capitalTemplateEntity.getMatchTargetCode())) {
+                continue;
+            }
             for (String matchTargetCode : capitalTemplateEntity.getMatchTargetCode().split(",")) {
                 if (Objects.isNull(compensatoryDtoMap.get(matchTargetCode))
                         && TemplateCapitalType.CAPITAL.getCapitalType().equals(capitalTemplateEntity.getCapitalType())) {
@@ -94,18 +99,20 @@ public class CreatePricingServerImpl implements CreatePricingServer {
                     CapitalPricingBean capitalPricingBean = this.buildCapitalPricingBean(capitalTemplate, productPricingBean);
                     // 只有资方定价才需要生成代偿方
                     if (TemplateCapitalType.CAPITAL.getCapitalType().equals(capitalTemplate.getCapitalType())) {
-                        String[] compensatoryCodes = capitalTemplate.getMatchTargetCode().split(",");
-                        CompensatoryDto compensatoryDto = compensatoryDtoMap.get(compensatoryCodes[0]);
-                        capitalPricingBean.setCompensatoryCapitalCode(compensatoryDto.getCompensatoryCapitalCode());
-                        capitalPricingBean.setCompensatoryCapitalName(compensatoryDto.getCompensatoryCapitalName());
-                        capitalPricingBean.setCompensatoryMemberNo(compensatoryDto.getCompensatoryMemberNo());
-                        if (compensatoryCodes.length > 1) {
-                            List<CompensatoryDto> compensatoryDtos = new ArrayList<>();
-                            for (int i = 1; i < compensatoryCodes.length; i++) {
-                                compensatoryDtos.add(compensatoryDtoMap.get(compensatoryCodes[i]));
+                        if (StringUtils.isNotBlank(capitalTemplate.getMatchTargetCode())) {
+                            String[] compensatoryCodes = capitalTemplate.getMatchTargetCode().split(",");
+                            CompensatoryDto compensatoryDto = compensatoryDtoMap.get(compensatoryCodes[0]);
+                            capitalPricingBean.setCompensatoryCapitalCode(compensatoryDto.getCompensatoryCapitalCode());
+                            capitalPricingBean.setCompensatoryCapitalName(compensatoryDto.getCompensatoryCapitalName());
+                            capitalPricingBean.setCompensatoryMemberNo(compensatoryDto.getCompensatoryMemberNo());
+                            if (compensatoryCodes.length > 1) {
+                                List<CompensatoryDto> compensatoryDtos = new ArrayList<>();
+                                for (int i = 1; i < compensatoryCodes.length; i++) {
+                                    compensatoryDtos.add(compensatoryDtoMap.get(compensatoryCodes[i]));
+                                }
+                                String compensatoryJson = JSON.toJSONString(compensatoryDtos);
+                                capitalPricingBean.setCompensatoryExpandInfo(compensatoryJson);
                             }
-                            String compensatoryJson = JSON.toJSONString(compensatoryDtos);
-                            capitalPricingBean.setCompensatoryExpandInfo(compensatoryJson);
                         }
                     }
                     capitalPricingBeans.add(capitalPricingBean);
@@ -119,7 +126,7 @@ public class CreatePricingServerImpl implements CreatePricingServer {
             ProductPricingBean productPricingBean = productPricingServer.selectByPricingNo(capitalPricingBean.getMatchTargetNo());
             for (CapitalTemplateEntity capitalTemplate : capitalTemplates) {
                 if (capitalTemplate.getMatchTargetRankLevel().contains(productPricingBean.getRankLevel())) {
-                    if (!StringUtils.isEmpty(capitalTemplate.getFeeCode())) {
+                    if (StringUtils.isNotBlank(capitalTemplate.getFeeCode())) {
                         String[] feeCodes = capitalTemplate.getFeeCode().split(",");
                         for (String feeCode : feeCodes) {
                             pricingFeeBeanList.add(this.buildPricingFeeBean(capitalPricingBean, feeCode));

@@ -162,10 +162,37 @@ public class IndexController {
             }
             CapitalBean capitalBean = capitalServer.createCapital(capitalCode);
             elementDataServer.addCapitalInfo(capitalElementList, capitalBean);
-
-
+            List<ProductPricingBean> productPricingBeans = exlRead.getProductPricingBeans(SheetIndex.PRODUCT_PRICING, 3);
+            productPricingServer.addProductPricingInfo(productPricingBeans, capitalBean);
+            List<ExlFeeParamBean> lists = exlRead.getExlFeeParamBeans(SheetIndex.PRODUCT_PRICING, 3);
+            List<PricingFeeBean> pricingFeeBeans = new ArrayList<>();
+            Class<?> exlFeeParamBeanClass = ExlFeeParamBean.class;
+            Field[] exlFeeParamBeanFields = exlFeeParamBeanClass.getDeclaredFields();
+            for (ExlFeeParamBean exlFeeParamBean : lists) {
+                PricingFeeBean pricingFeeBean = this.mapperFacade.map(exlFeeParamBean, PricingFeeBean.class);
+                List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMappingByFeeCode(pricingFeeBean.getFeeCode())).getParams();
+                List<FormulaParamModel> formulaParamList = new ArrayList<>();
+                for (FormulaParamMapping feeFormulaParam : feeFormulaParams) {
+                    for (Field exlFeeParamBeanField : exlFeeParamBeanFields) {
+                        // 利用反射获取字段
+                        exlFeeParamBeanField.setAccessible(true);
+                        if (exlFeeParamBeanField.getName().equals(feeFormulaParam.getParamCode())
+                                && Objects.nonNull(exlFeeParamBeanField.get(exlFeeParamBean))) {
+                            FormulaParamModel formulaParamModel = new FormulaParamModel();
+                            formulaParamModel.setParamCode(feeFormulaParam.getParamCode());
+                            formulaParamModel.setValue(String.valueOf(exlFeeParamBeanField.get(exlFeeParamBean)));
+                            formulaParamList.add(formulaParamModel);
+                            break;
+                        }
+                    }
+                }
+                pricingFeeBean.setFormulaParamList(formulaParamList);
+                pricingFeeBeans.add(pricingFeeBean);
+            }
+            List<PricingFeeBean> pricingFeeBeanList = pricingFeeServer.addProductFeeInfo(productPricingBeans, pricingFeeBeans, capitalElementList);
+            createPricingServer.createPricingProcess(capitalBean, capitalElementList, productPricingBeans, pricingFeeBeanList);
             redirectAttributes.addFlashAttribute("message", "文件上传成功: " + file.getOriginalFilename());
-        } catch (IOException e) {
+        } catch (Exception e) {
             Path path = Paths.get(uploadDir + file.getOriginalFilename());
             try {
                 Files.deleteIfExists(path);

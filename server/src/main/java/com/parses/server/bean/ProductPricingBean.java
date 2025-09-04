@@ -44,25 +44,9 @@ public class ProductPricingBean {
      */
     private BigDecimal yearRate;
     /**
-     * 月利率
-     */
-    private BigDecimal monthRate;
-    /**
-     * 日利率
-     */
-    private BigDecimal dayRate;
-    /**
-     * 展示年利率
-     */
-    private BigDecimal aprYearRate;
-    /**
      * 展示月利率
      */
     private BigDecimal aprMonthRate;
-    /**
-     * 展示日利率
-     */
-    private BigDecimal aprDayRate;
     /**
      * 还款方式 - 必填
      */
@@ -79,8 +63,4 @@ public class ProductPricingBean {
      * 渠道  - 必填
      */
     private String channelType;
-    /**
-     * 操作人  - 必填
-     */
-    private String operatorName;
 }

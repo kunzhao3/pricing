@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 @Service
 public class CapitalServerImpl implements CapitalServer {
@@ -44,6 +45,9 @@ public class CapitalServerImpl implements CapitalServer {
         CapitalBean capitalBean = new CapitalBean();
         capitalBean.setCapitalCode(capitalCode);
         MerchantMemberEntity merchantMember = cscMerchantMemberServer.selectByMerchantCodeAndMerchantType(capitalCode, MultipleCompensatoryMapping.PRIORITY_CAPITAL.getMerchantType());
+        if(Objects.isNull(merchantMember)){
+            throw new RuntimeException("csc 未配置资方信息");
+        }
         capitalBean.setCapitalNo(merchantMember.getMerchantNo());
         capitalBean.setCapitalMemberNo(merchantMember.getMemberNo());
         capitalBean.setCapitalName(merchantMember.getMemberName());
