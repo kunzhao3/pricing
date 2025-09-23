@@ -305,10 +305,10 @@
 
   <insert id="batchInsert" parameterType="java.util.List">
     insert into t_pec_pricing_fee
-    (f_pricing_type, f_pricing_no, f_pricing_mirror_no, f_fee_code, f_fee_name, f_calc_period, f_formula_type, f_formula_no, f_formula_name, f_formula_params_json, f_operater_name)
+    (f_pricing_type, f_pricing_no, f_pricing_mirror_no, f_fee_code, f_fee_name, f_fee_description, f_calc_period, f_formula_type, f_formula_no, f_formula_name, f_formula_params_json, f_formula_description, f_formula_carbon_name, f_formula_carbon_no, f_formula_carbon_description,f_operater_name)
     values
     <foreach collection="list" item="item" separator=",">
-    (#{item.pricingType}, #{item.pricingNo}, #{item.pricingMirrorNo}, #{item.feeCode}, #{item.feeName}, #{item.calcPeriod}, #{item.formulaType}, #{item.formulaNo}, #{item.formulaName}, #{item.formulaParamsJson}, #{item.operaterName})
+    (#{item.pricingType}, #{item.pricingNo}, #{item.pricingMirrorNo}, #{item.feeCode}, #{item.feeName},'', #{item.calcPeriod}, #{item.formulaType}, #{item.formulaNo}, #{item.formulaName}, #{item.formulaParamsJson}, #{item.formulaName} ,'','','',#{item.operaterName})
     </foreach>
   </insert>
 </mapper>
