@@ -185,8 +185,11 @@ public class ExlRead {
                 productPricingBean.setRankLevel(consumerLabels.length > 1 ? consumerLabels[0] : level);
                 productPricingBean.setConsumerLabel(consumerLabels.length > 1 ? consumerLabels[1] : "");
                 Integer yearRateColumn = feeParamLevelRateIdListMap.get("资方").get(FormulaParamMapping.yearRate.getParamName()).get(level);
-                productPricingBean.setYearRate(BigDecimal.valueOf(Double.parseDouble(getMergedCellValue(sheet, row, yearRateColumn))));
                 Integer aprMonthRateColumn = feeParamLevelRateIdListMap.get("月综合").get(FormulaParamMapping.complexMonthRate.getParamName()).get(level);
+                if(getMergedCellValue(sheet, row, yearRateColumn).isEmpty() || getMergedCellValue(sheet, row, aprMonthRateColumn).isEmpty()){
+                    continue;
+                }
+                productPricingBean.setYearRate(BigDecimal.valueOf(Double.parseDouble(getMergedCellValue(sheet, row, yearRateColumn))));
                 productPricingBean.setAprMonthRate(BigDecimal.valueOf(Double.parseDouble(getMergedCellValue(sheet, row, aprMonthRateColumn))));
                 productPricingBeans.add(productPricingBean);
             }
@@ -234,7 +237,7 @@ public class ExlRead {
                                 FormulaParamMapping formulaParamMapping = FormulaParamMapping.getParamMappingByParamName(paramName);
                                 for (Field declaredField : declaredFields) {
                                     declaredField.setAccessible(true);
-                                    if (declaredField.getName().equals(formulaParamMapping.getParamCode())) {
+                                    if (formulaParamMapping != null && declaredField.getName().equals(formulaParamMapping.getParamCode())) {
                                         try {
                                             PropertyDescriptor pd = new PropertyDescriptor(formulaParamMapping.getParamCode(), exlFeeParamBeanClass);
                                             Method writeMethod = pd.getWriteMethod();

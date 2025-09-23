@@ -70,15 +70,24 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                         bean -> bean,
                         (existing, replacement) -> existing
                 ));
+        List<String> pricingFeeStr = new ArrayList<>();
         if (pricingFeeMap.size() != pricingBeanMap.size()) {
             // 检查每个键是否存在
             pricingFeeMap.keySet().forEach(key -> {
                 if (!pricingBeanMap.containsKey(key)) {
                     logger.error("定价数据缺失{}不存在于产品定价中", key);
-                    throw new RuntimeException("定价数据缺失" + key + "不存在于产品定价中");
+                } else {
+                    pricingFeeStr.add(key);
                 }
             });
         }
+        List<PricingFeeBean> pricingFeeList = new ArrayList<>();
+        for (PricingFeeBean pricingFeeBean : pricingFeeBeans) {
+            if (pricingFeeStr.contains(pricingFeeBean.getTotalStage() + pricingFeeBean.getRankLevel() + pricingFeeBean.getConsumerLabel())) {
+                pricingFeeList.add(pricingFeeBean);
+            }
+        }
+
         String capitalCode = ""; // 资方编码
         String graceDays = "";// 宽限期天数
         String milliAndFourPercent = "[]"; // 提前结清千一/百四标识
@@ -107,7 +116,7 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                 logger.error("模板编号{}未找到 FeeTemplate", capitalTemplate.getFeeTemplateNo());
                 throw new RuntimeException("模板编号" + capitalTemplate.getFeeTemplateNo() + "未找到 FeeTemplate");
             }
-            for (PricingFeeBean pricingFeeBean : pricingFeeBeans) {
+            for (PricingFeeBean pricingFeeBean : pricingFeeList) {
                 ProductPricingBean productPricingBean = pricingBeanMap.get(pricingFeeBean.getTotalStage() + pricingFeeBean.getRankLevel() + pricingFeeBean.getConsumerLabel());
                 pricingFeeBean.setPricingNo(productPricingBean.getPricingNo());
                 pricingFeeBean.setPricingMirrorNo(productPricingBean.getCurrentMirrorNo());
@@ -116,15 +125,13 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                 if (capitalTemplate.getMatchTargetRankLevel().contains(pricingFeeBean.getRankLevel())) {
                     List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMappingByFeeCode(pricingFeeBean.getFeeCode())).getParams();
                     List<FormulaParamModel> formulaParamList = pricingFeeBean.getFormulaParamList();
+                    Set<String> formulaParamCodeSet = formulaParamList.stream().map(FormulaParamModel::getParamCode).collect(Collectors.toSet());
                     for (FormulaParamMapping feeFormulaParam : feeFormulaParams) {
                         FormulaParamModel formulaParamModel = new FormulaParamModel();
                         formulaParamModel.setParamCode(feeFormulaParam.getParamCode());
                         switch (feeFormulaParam) {
                             case baseAmountType:
-                                Set<String> paramCodeSet = formulaParamList.stream()
-                                        .map(FormulaParamModel::getParamCode)
-                                        .collect(Collectors.toSet());
-                                if (!paramCodeSet.contains(FormulaParamMapping.baseAmountType.getParamCode())) {
+                                if (!formulaParamCodeSet.contains(FormulaParamMapping.baseAmountType.getParamCode())) {
                                     formulaParamModel.setValue(feeFormulaParam.getDefaultValue());
                                     formulaParamList.add(formulaParamModel);
                                 }
@@ -140,20 +147,24 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                                 formulaParamList.add(formulaParamModel);
                                 break;
                             case complexMonthRate:
-                                List<PreSettleRateBean> milliPreSettleRate = milliAndFourPercentPreSettleRate.getMilliPreSettleRate();
-                                List<PreSettleRateBean> fourPercentPreSettleRate = milliAndFourPercentPreSettleRate.getFourPercentPreSettleRate();
-                                if (CollectionUtils.isNotEmpty(milliPreSettleRate) || CollectionUtils.isNotEmpty(fourPercentPreSettleRate)) {
-                                    FormulaParamModel preSettleComplexDayRate = new FormulaParamModel();
-                                    preSettleComplexDayRate.setParamCode(FormulaParamMapping.preSettleComplexDayRate.getParamCode());
-                                    preSettleComplexDayRate.setValue(FormulaParamMapping.preSettleComplexDayRate.getDefaultValue());
-                                    if (Objects.nonNull(PreSettleComplexDayRateMapping.getRateMapping(capitalCode))) {
-                                        preSettleComplexDayRate.setValue(PreSettleComplexDayRateMapping.getRateMapping(capitalCode).getRate());
+                                // baseRate和capitalAndUndertakeCapitalGuaranteeYearIRR不会和千一百四同时存在
+                                if (!formulaParamCodeSet.contains(FormulaParamMapping.baseRate.getParamCode())
+                                        && !formulaParamCodeSet.contains(FormulaParamMapping.capitalAndUndertakeCapitalGuaranteeYearIRR.getParamCode())) {
+                                    List<PreSettleRateBean> milliPreSettleRate = milliAndFourPercentPreSettleRate.getMilliPreSettleRate();
+                                    List<PreSettleRateBean> fourPercentPreSettleRate = milliAndFourPercentPreSettleRate.getFourPercentPreSettleRate();
+                                    if (CollectionUtils.isNotEmpty(milliPreSettleRate) || CollectionUtils.isNotEmpty(fourPercentPreSettleRate)) {
+                                        FormulaParamModel preSettleComplexDayRate = new FormulaParamModel();
+                                        preSettleComplexDayRate.setParamCode(FormulaParamMapping.preSettleComplexDayRate.getParamCode());
+                                        preSettleComplexDayRate.setValue(FormulaParamMapping.preSettleComplexDayRate.getDefaultValue());
+                                        if (Objects.nonNull(PreSettleComplexDayRateMapping.getRateMapping(capitalCode))) {
+                                            preSettleComplexDayRate.setValue(Objects.requireNonNull(PreSettleComplexDayRateMapping.getRateMapping(capitalCode)).getRate());
+                                        }
+                                        formulaParamList.add(preSettleComplexDayRate);
+                                        FormulaParamModel preSettleSwitchRate = new FormulaParamModel();
+                                        preSettleSwitchRate.setParamCode(FormulaParamMapping.preSettleSwitchRate.getParamCode());
+                                        preSettleSwitchRate.setValue(FormulaParamMapping.preSettleSwitchRate.getDefaultValue());
+                                        formulaParamList.add(preSettleSwitchRate);
                                     }
-                                    formulaParamList.add(preSettleComplexDayRate);
-                                    FormulaParamModel preSettleSwitchRate = new FormulaParamModel();
-                                    preSettleSwitchRate.setParamCode(FormulaParamMapping.preSettleSwitchRate.getParamCode());
-                                    preSettleSwitchRate.setValue(FormulaParamMapping.preSettleSwitchRate.getDefaultValue());
-                                    formulaParamList.add(preSettleSwitchRate);
                                 }
                                 break;
                             case repaymentWay:
@@ -165,7 +176,7 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                                 break;
                             case quickenDayRate:
                                 if (capitalTemplate.getIsSupportAccelerate().equals("1")) {
-                                    formulaParamModel.setValue(QuickenDayRate.getQuickenDayRateMapping(pricingFeeBean.getRankLevel()).getRate());
+                                    formulaParamModel.setValue(Objects.requireNonNull(QuickenDayRate.getQuickenDayRateMapping(pricingFeeBean.getRankLevel())).getRate());
                                     formulaParamList.add(formulaParamModel);
                                 }
                                 break;
@@ -195,7 +206,7 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                 }
             }
         }
-        return pricingFeeBeans.stream()
+        return pricingFeeList.stream()
                 .sorted(Comparator.comparing(PricingFeeBean::getTotalStage)
                         .thenComparing(PricingFeeBean::getRankLevel)
                         .thenComparing(PricingFeeBean::getConsumerLabel)

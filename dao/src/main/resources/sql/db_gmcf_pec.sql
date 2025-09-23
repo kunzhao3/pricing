@@ -407,8 +407,8 @@ create table  t_pec_capital_template
 INSERT INTO t_pec_capital_template
 (f_capital_type, f_capital_code, f_match_target_code, f_match_target_rank_level ,f_repayment_formula_no, f_repayment_formula_name, f_clearing_formula_no, f_clearing_formula_name, f_is_support_accelerate, f_repurchase_calculation_mode, f_fee_template_no, f_fee_code, f_operater_name)
 VALUES
-(1, 'C5024', 'G0012', 'A,B,C,D', '766bdbe4294c42a2bee62d06d15bc746', '西安债务债权公式', '766bdbe4294c42a2bee62d06d15bc746', '联合收清分公式', 1, 'REPURCHASE_STAGE_ONLY', '0d2f904761f24362bb7d0acba4a22351', 'GUARANTEE_FEE', 'PEC'),
-(2, 'G0012', 'C5024', 'A,B,C,D', '766bdbe4294c42a2bee62d06d15bc746', '西安债务债权公式', '39002f22bf7e41fd9f4e30aa949d1d96', '联合收代偿清分公式', 1,'',  '0d2f904761f24362bb7d0acba4a22351', 'OVERDUE_LIQUIDATED_DAMAGES,PENALTY_INTEREST', 'PEC'),
+(1, 'C5024', 'G0012', 'A,B,C,D', '766bdbe4294c42a2bee62d06d15bc746', '西安债务债权公式', '766bdbe4294c42a2bee62d06d15bc746', '联合收清分公式', 1, 'REPURCHASE_STAGE_ONLY', 'f0d709cad24c46f988300d7cad15e2ad', 'GUARANTEE_FEE', 'PEC'),
+(2, 'G0012', 'C5024', 'A,B,C,D', '766bdbe4294c42a2bee62d06d15bc746', '西安债务债权公式', '39002f22bf7e41fd9f4e30aa949d1d96', '联合收代偿清分公式', 1,'',  'f0d709cad24c46f988300d7cad15e2ad', 'OVERDUE_LIQUIDATED_DAMAGES,PENALTY_INTEREST', 'PEC'),
 (1, 'C5048', 'G0009', 'A', '077dfd23594f45d9a675038e4461b610', '蓝海银行（实担）债务债权公式', '766bdbe4294c42a2bee62d06d15bc746', '联合收清分公式', 1, '' ,'0d2f904761f24362bb7d0acba4a22351', 'GUARANTEE_FEE', 'PEC'),
 (2, 'G0009', 'C5048', 'A', '077dfd23594f45d9a675038e4461b610', '蓝海银行（实担）债务债权公式', '6dc07c6c6c7241609302cdc3e6c03eb5', '实担模式代偿清分公式', 1, '' ,'0d2f904761f24362bb7d0acba4a22351', 'OVERDUE_LIQUIDATED_DAMAGES', 'PEC'),
 (1, 'C5048', 'G0009,G0012', 'B,C,D', '077dfd23594f45d9a675038e4461b610', '蓝海银行（实担）债务债权公式', 'e2a3170b238b42cbbcc0f0fca9351215', '双代偿资方清分公式', 1, '' ,'7fb28bcde98540f4bfa1d4b11b031546', 'GUARANTEE_FEE_ONE,GUARANTEE_FEE_TWO', 'PEC'),
