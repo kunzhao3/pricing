@@ -70,20 +70,18 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                         bean -> bean,
                         (existing, replacement) -> existing
                 ));
-        List<String> pricingFeeStr = new ArrayList<>();
         if (pricingFeeMap.size() != pricingBeanMap.size()) {
             // 检查每个键是否存在
             pricingFeeMap.keySet().forEach(key -> {
                 if (!pricingBeanMap.containsKey(key)) {
                     logger.error("定价数据缺失{}不存在于产品定价中", key);
-                } else {
-                    pricingFeeStr.add(key);
                 }
             });
         }
+
         List<PricingFeeBean> pricingFeeList = new ArrayList<>();
         for (PricingFeeBean pricingFeeBean : pricingFeeBeans) {
-            if (pricingFeeStr.contains(pricingFeeBean.getTotalStage() + pricingFeeBean.getRankLevel() + pricingFeeBean.getConsumerLabel())) {
+            if (pricingBeanMap.containsKey(pricingFeeBean.getTotalStage() + pricingFeeBean.getRankLevel() + pricingFeeBean.getConsumerLabel())) {
                 pricingFeeList.add(pricingFeeBean);
             }
         }
