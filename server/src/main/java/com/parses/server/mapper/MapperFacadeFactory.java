@@ -43,7 +43,11 @@ public class MapperFacadeFactory implements FactoryBean<MapperFacade> {
 			public void mapBtoA(PricingFeeBean bean, PricingFeeEntity entity, MappingContext context) {
 				entity.setCalcPeriod(1);
 				if(bean.getFormulaParamList() != null) {
-					entity.setFormulaParamsJson(PricingUtils.toFormulaParamJson(bean.getFormulaParamList()));
+					if(bean.getFormulaType() == 1){
+						entity.setFormulaParamsJson(PricingUtils.toFormulaParamJson(bean.getFormulaParamList(),true));
+					} else {
+						entity.setFormulaParamsJson(PricingUtils.toFormulaParamJson(bean.getFormulaParamList(),false));
+					}
 				}
 			}
 		}).byDefault().register();

@@ -145,7 +145,6 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                                 formulaParamList.add(formulaParamModel);
                                 break;
                             case complexMonthRate:
-                                // baseRate和capitalAndUndertakeCapitalGuaranteeYearIRR不会和千一百四同时存在
                                 if (!formulaParamCodeSet.contains(FormulaParamMapping.baseRate.getParamCode())
                                         && !formulaParamCodeSet.contains(FormulaParamMapping.capitalAndUndertakeCapitalGuaranteeYearIRR.getParamCode())) {
                                     List<PreSettleRateBean> milliPreSettleRate = milliAndFourPercentPreSettleRate.getMilliPreSettleRate();
@@ -175,12 +174,6 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                             case quickenDayRate:
                                 if (capitalTemplate.getIsSupportAccelerate().equals("1")) {
                                     formulaParamModel.setValue(Objects.requireNonNull(QuickenDayRate.getQuickenDayRateMapping(pricingFeeBean.getRankLevel())).getRate());
-                                    formulaParamList.add(formulaParamModel);
-                                }
-                                break;
-                            case calculationMode:
-                                if (StringUtils.isNotEmpty(capitalTemplate.getRepurchaseCalculationMode())) {
-                                    formulaParamModel.setValue(capitalTemplate.getRepurchaseCalculationMode());
                                     formulaParamList.add(formulaParamModel);
                                 }
                                 break;

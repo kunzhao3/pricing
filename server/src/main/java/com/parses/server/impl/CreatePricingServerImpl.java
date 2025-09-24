@@ -9,6 +9,8 @@ import com.parses.server.bean.*;
 import com.parses.server.bean.dto.CompensatoryDto;
 import com.parses.server.constant.TemplateCapitalType;
 import com.parses.server.csc.CscMerchantMemberServer;
+import com.parses.server.mapping.FeeFormulaParamMapping;
+import com.parses.server.mapping.FormulaParamMapping;
 import com.parses.server.mapping.MultipleCompensatoryMapping;
 import com.parses.server.util.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -122,14 +124,14 @@ public class CreatePricingServerImpl implements CreatePricingServer {
         capitalPricingServer.batchInsertCapitalPricing(capitalPricingBeans);
         List<PricingFeeBean> pricingFeeBeanList = new ArrayList<>();
         for (CapitalPricingBean capitalPricingBean : capitalPricingBeans) {
-            pricingFeeBeanList.add(this.buildPricingFeeBean(capitalPricingBean, ""));
+            pricingFeeBeanList.add(this.buildPricingFeeBean(capitalPricingBean));
             ProductPricingBean productPricingBean = productPricingServer.selectByPricingNo(capitalPricingBean.getMatchTargetNo());
             for (CapitalTemplateEntity capitalTemplate : capitalTemplates) {
                 if (capitalTemplate.getMatchTargetRankLevel().contains(productPricingBean.getRankLevel())) {
                     if (StringUtils.isNotBlank(capitalTemplate.getFeeCode())) {
                         String[] feeCodes = capitalTemplate.getFeeCode().split(",");
                         for (String feeCode : feeCodes) {
-                            pricingFeeBeanList.add(this.buildPricingFeeBean(capitalPricingBean, feeCode));
+                            pricingFeeBeanList.add(this.buildPricingFeeBean(capitalTemplate, capitalPricingBean, feeCode));
                         }
                     }
                     break;
@@ -165,8 +167,29 @@ public class CreatePricingServerImpl implements CreatePricingServer {
         return capitalPricingBean;
     }
 
-    private PricingFeeBean buildPricingFeeBean(CapitalPricingBean capitalPricingBean, String feeCode) {
+    private PricingFeeBean buildPricingFeeBean(CapitalTemplateEntity capitalTemplate, CapitalPricingBean capitalPricingBean, String feeCode) {
         PricingFeeBean pricingFeeBean = pricingFeeServer.selectByPricingNoAndFeeCode(capitalPricingBean.getMatchTargetNo(), feeCode);
+        pricingFeeBean.setPricingType(2);
+        pricingFeeBean.setPricingNo(capitalPricingBean.getPricingNo());
+        pricingFeeBean.setPricingMirrorNo(capitalPricingBean.getCurrentMirrorNo());
+        List<FormulaParamMapping> feeFormulaParams = Objects.requireNonNull(FeeFormulaParamMapping.getFeeParamsMappingByFeeCode(pricingFeeBean.getFeeCode())).getParams();
+        List<FormulaParamModel> formulaParamList = pricingFeeBean.getFormulaParamList();
+        for (FormulaParamMapping formulaParamMapping : feeFormulaParams) {
+            if (formulaParamMapping.getParamCode().equals(FormulaParamMapping.calculationMode.getParamCode())) {
+                if (StringUtils.isNotEmpty(capitalTemplate.getRepurchaseCalculationMode())) {
+                    FormulaParamModel formulaParam = new FormulaParamModel();
+                    formulaParam.setParamCode(formulaParamMapping.getParamCode());
+                    formulaParam.setValue(capitalTemplate.getRepurchaseCalculationMode());
+                    formulaParamList.add(formulaParam);
+                }
+                break;
+            }
+        }
+        return pricingFeeBean;
+    }
+
+    private PricingFeeBean buildPricingFeeBean(CapitalPricingBean capitalPricingBean) {
+        PricingFeeBean pricingFeeBean = pricingFeeServer.selectByPricingNoAndFeeCode(capitalPricingBean.getMatchTargetNo(), "");
         pricingFeeBean.setPricingType(2);
         pricingFeeBean.setPricingNo(capitalPricingBean.getPricingNo());
         pricingFeeBean.setPricingMirrorNo(capitalPricingBean.getCurrentMirrorNo());
