@@ -35,17 +35,13 @@ public class ExlFeeParamBean {
      */
     private BigDecimal preSettleDayRate;
     /**
-     * 费项利率  - 必填
+     * 费用利率  - 必填
      */
     private BigDecimal baseRate;
     /**
      * 年天数
      */
     private Integer yearDays;
-    /**
-     * 罚息/逾期违约金计算方式 1:全部本金 2:剩余未还本金
-     */
-    private Integer baseAmountType;
     /**
      * 月综合利率
      */

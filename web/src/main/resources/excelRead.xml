@@ -21,13 +21,12 @@
 			<column cidx="4" cname="费用代码" pname="feeCode" type="" cformat="" handler=""/>
 			<column cidx="5" cname="年利率" pname="yearRate" type="" cformat="" handler=""/>
 			<column cidx="6" cname="提前结清日利率" pname="preSettleDayRate" type="" cformat="" handler=""/>
-			<column cidx="7" cname="利率" pname="baseRate" type="" cformat="" handler=""/>
+			<column cidx="7" cname="费用利率" pname="baseRate" type="" cformat="" handler=""/>
 			<column cidx="8" cname="年天数" pname="yearDays" type="" cformat="" handler=""/>
-			<column cidx="9" cname="罚息/逾期违约金计算方式" pname="baseAmountType" type="" cformat="" handler=""/>
-			<column cidx="10" cname="月综合利率" pname="complexMonthRate" type="" cformat="" handler=""/>
-			<column cidx="11" cname="资方和对资担保公司IRR" pname="capitalAndUndertakeCapitalGuaranteeYearIRR" type="" cformat="" handler=""/>
-			<column cidx="12" cname="结算利率" pname="settlementRate" type="" cformat="" handler=""/>
-			<column cidx="13" cname="浮动利率" pname="floatingRate" type="" cformat="" handler=""/>
+			<column cidx="9" cname="月综合利率" pname="complexMonthRate" type="" cformat="" handler=""/>
+			<column cidx="10" cname="资方和对资担保公司IRR" pname="capitalAndUndertakeCapitalGuaranteeYearIRR" type="" cformat="" handler=""/>
+			<column cidx="11" cname="结算利率" pname="settlementRate" type="" cformat="" handler=""/>
+			<column cidx="12" cname="浮动利率" pname="floatingRate" type="" cformat="" handler=""/>
 		</columns>
 	</parse>
 

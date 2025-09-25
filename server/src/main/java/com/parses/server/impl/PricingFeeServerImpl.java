@@ -128,13 +128,8 @@ public class PricingFeeServerImpl implements PricingFeeServer {
                         FormulaParamModel formulaParamModel = new FormulaParamModel();
                         formulaParamModel.setParamCode(feeFormulaParam.getParamCode());
                         switch (feeFormulaParam) {
-                            case baseAmountType:
-                                if (!formulaParamCodeSet.contains(FormulaParamMapping.baseAmountType.getParamCode())) {
-                                    formulaParamModel.setValue(feeFormulaParam.getDefaultValue());
-                                    formulaParamList.add(formulaParamModel);
-                                }
-                                break;
                             case chargeMode:
+                            case baseAmountType:
                             case includePayDate:
                             case includeGraceDays:
                                 formulaParamModel.setValue(feeFormulaParam.getDefaultValue());
