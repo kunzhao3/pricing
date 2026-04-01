@@ -36,7 +36,7 @@ public enum FeeFormulaParamMapping {
     /**
      * 服务费
      */
-    SERVICE_FEE("服务费", "SERVICE_FEE", Arrays.asList(complexMonthRate, preSettleSwitchRate, preSettleComplexDayRate, quickenDayRate, capitalAndUndertakeCapitalGuaranteeYearIRR, yearDays)),
+    SERVICE_FEE("服务费", "SERVICE_FEE", Arrays.asList(complexMonthRate, preSettleSwitchRate, preSettleComplexDayRate, quickenDayRate, capitalAndUndertakeCapitalGuaranteeYearIRR, complexDayRate, yearDays)),
 
     /**
      * 服务费1
