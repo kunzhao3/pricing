@@ -29,6 +29,7 @@ public enum FormulaParamMapping {
     quickenDayRate("加速到期时:费项计算日利率", "quickenDayRate", "","A等级-0.065%,BCD等级-0.098%"),
     quickenRecalculate("加速到期后:逾期费项重算方式", "quickenRecalculate", "1","1:加速到期后按日重新计算"),
     calculationMode("回购时:重算方式", "calculationMode", "","BY_DAY_ENTIRELY:合并后未还金额*日费率*实际占用天数,REPURCHASE_STAGE_ONLY:只包含回购期次费用,OVER_MUST_PAY_DATE_STAGE:已出账单日期次费用"),
+    complexDayRate("服务费综合日费率","complexDayRate","","服务费综合日费率"),
     ;
 
     private final String paramName;
